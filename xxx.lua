@@ -6,10 +6,11 @@ lua
 没有 .. ，被 + 取代
 
 5.0
-不能用_G, 每个文件，在load时，会有个本地环境，被叫做 this，所有文件内的不带local的写法都是this这个table的属性
-如：
-a = 1 为 this.a = 1
+不能用_G, 每个文件，在load时，就是在执行一个function，这时会有个本地环境，被叫做 this的table，所有文件内的不带local的写法都是this这个table的属性
+其他的function在创建时只要不是local的都会存在本地环境指向拥有它的table，这个环境绑定了就不会改变，除非用call(func, owner)或者bind(func, owner)
+如：a = 1 为 this.a = 1
 可用此实现面向对象
+						
 统一 for 的用法为 for xx = xxx do end 
 原来的 for k,v in pairs(table_name) do
 	print(k,v)
