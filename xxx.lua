@@ -10,6 +10,7 @@ lua
 其他的function在创建时只要不是local的都会存在本地环境指向拥有它的table，这个环境绑定了就不会改变，除非用call(func, owner)或者bind(func, owner)
 如：a = 1 为 this.a = 1
 可用此实现面向对象
+:不再可用，因为面向对象用 环境 了，而且:也容易用错，
 						
 统一 for 的用法为 for xx = xxx do end 
 原来的 for k,v in pairs(table_name) do
@@ -26,7 +27,7 @@ for i = range(1, 10) do
 end
 
 5.1
-:不再可用，因为面向对象用 环境 了，而且:也容易用错，其他一些全局函数尽可能变成类函数，
+其他一些全局函数尽可能变成类函数，
 如 unpack, setmetatable 为 table.unpack, table.setmetatable
 
-没有关键字 in while until then 没有符号 : .. 没有特殊字符 self _G 增加特殊字符 this range
+没有关键字 in while until then 没有符号 : .. 没有特殊字符 self _G 增加特殊字符 this range 增加全局函数call bind
