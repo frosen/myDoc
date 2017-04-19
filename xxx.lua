@@ -34,17 +34,17 @@ local function add(n)
 	return $a
 end
 
+5.1
 require() 会在文件最后添加 return self 也就是说自己不用添加任何return就会返回环境，如果你还要添加return会报错，但是可以用do return end，虽然不建议
 
-load loadfile loadstring可以带参数，如loadfile(path, param1, param2, ...), 获取的文本中会以一个全局的 ... 得到相应的参数；
+load loadfile loadstring 可以带参数，如loadfile(path, param1, param2, ...), 获取的文本中会以一个全局的 ... 得到相应的参数；
 这样就把这个调用过程和function保持一致
 require，命令行调用也同样，第一个值也是参数，如 reuqire("xxx", 1)，参数为"xxx", 1；lua xxx.lua 1 2 参数为"xxx.lua" 1 2
 
-5.1
 一些全局函数尽可能变成类函数，
 如 unpack, setmetatable 为 table.unpack, table.setmetatable
 math库全部为number的元表
-同时由于新的self机制，原来的全局函数将不可再用，如 math.floor(1)改为 (1).floor()
+原来的全局函数仍可以用，如 math.floor(1) 和 (1).floor() ，因为math是number的元表，通过元表的index方法将self赋值到math的参数上
 
 没有关键字 in while until then 没有符号 : .. 没有特殊字符 _G 增加特殊字符 range 修改 self
 
