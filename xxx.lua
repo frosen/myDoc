@@ -27,11 +27,11 @@ end
 移除setEnv等，新增全局函数 call，call(func, env table, arg1, ...), 同时pcall，xpcall都增加了env的参数
 如果function改变了它所在的table，则环境也改变了
 
-为了避免冲突，upvalue需要用$指定，如
+原来%表示upvalue，这个保持下去，这样就不会和self冲突了
 local a = 0
 local function add(n)
-	$a = $a + n
-	return $a
+	%a = %a + n
+	return %a
 end
 
 5.1
