@@ -20,22 +20,31 @@ for i = range(1, 10) do
 end
 
 5.0
-不能用_G, 环境的概念改变，每个非local的function都有一个名为self的环境表，指向调用它的table，
+不能用_G, 环境的概念改变，每个非 local 的 function 都有一个名为 self 的环境表，指向调用它的 table，
 一个文件也是一个function，所以指向本文件的self
 可实现面向对象
 :不再可用，因为面向对象用 环境 了，而且:也容易用错，
 移除setEnv等，新增全局函数 call，call(func, env table, arg1, ...), 同时pcall，xpcall都增加了env的参数
 如果function改变了它所在的table，则环境也改变了
 
-原来%表示upvalue，这个保持下去，这样就不会和self冲突了
-local a = 0
-local function add(n)
-	%a = %a + n
-	return %a
+self 是可以省略的
+于是一个值的查找顺序为：本地local，self，upvalue的local，upvalue的self，以此类推
+local a = 1
+local b = {}
+b.a = 2
+function b.f()
+	c = {}
+	c.a = 3
+	local a = 4
+	function c.f( ... )
+		local a = 5
+		print(a)
+	end
 end
+可以跳过直接获取upvalue，则需要 upvalue.abc
 
 5.1
-require() 会在文件最后添加 return self 也就是说自己不用添加任何return就会返回环境，如果你还要添加return会报错，但是可以用do return end，虽然不建议
+require() 会返回文件最后的 return，但如果没有 return 则返回文件环境
 
 load loadfile loadstring 可以带参数，如loadfile(path, param1, param2, ...), 获取的文本中会以一个全局的 ... 得到相应的参数；
 这样就把这个调用过程和function保持一致
@@ -46,16 +55,17 @@ require，命令行调用也同样，第一个值也是参数，如 reuqire("xxx
 math库全部为number的元表
 原来的全局函数仍可以用，如 math.floor(1) 和 (1).floor() ，因为math是number的元表，通过元表的index方法将self赋值到math的参数上
 
-没有关键字 in while until then 没有符号 : .. 没有特殊字符 _G 增加特殊字符 range 修改 self
+tostring() print() 可以把table转换成字符串，便于和 loadstring 一起高效进行序列化和反序列化
+
+没有关键字 in while until then 没有符号 : .. 没有特殊字符 _G 增加特殊字符 range upvalue 修改 self
 
 -----------------------
 
 local Class = require "class"
 local Node = require "CC.Node"
 
-s = {}
-s.Size = require "CC.Size"
-s.Color = require "CC.Color"
+local Size = require "CC.Size"
+local Color = require "CC.Color"
 
 Class.class(self, "newLayer", Node)
 
@@ -67,20 +77,26 @@ local MAX_C = 5
 function ctor(r_color_colorTab, g, b)
 	call(super.ctor, self)
 
-	size = s.Size.new(0, 0)
+	size = Size.new(0, 0)
 	color = nil
 	otherColors = {}
 
 	local t = type(r_color_colorTab)
 
 	if t == "number" do
-		color = s.Color.new(r_color_colorTab, g, b)
+		color = Color.new(r_color_colorTab, g, b)
 	elseif t == "color" do
 		color = r_color_colorTab
 	elseif t == "table" do
 		color = r_color_colorTab[1]
 		otherColors = r_color_colorTab
 	end 	
+
+	local tab = {
+		doit = function ( ... )
+			
+		end
+	}
 end
 
 function setColor(c)
@@ -92,10 +108,10 @@ function getMixColor()
 		return color
 	end
 
-	local mix = s.Color.clear
+	local mix = Color.clear
 	for _, color = ipairs(otherColors) do
-		for i = range($MIN_C, $MAX_C) do
-			mix = s.Color.mix(color, mix) 
+		for i = range(MIN_C, MAX_C) do
+			mix = Color.mix(color, mix) 
 		end
 	end
 
