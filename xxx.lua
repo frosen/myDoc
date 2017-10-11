@@ -24,7 +24,8 @@ end
 一个文件也是一个function，所以指向本文件的self
 可实现面向对象
 :不再可用，因为面向对象用 环境 了，而且:也容易用错，
-移除setEnv等，新增全局函数 call，call(func, env table, arg1, ...), 同时pcall，xpcall都增加了env的参数
+setEnv，getEnv设置，获取的就是self
+新增全局函数 call，call(func, env table, arg1, ...), 同时pcall，xpcall都增加了env的参数
 如果function改变了它所在的table，则环境也改变了
 
 self 是可以省略的
@@ -38,13 +39,23 @@ function b.f()
 	local a = 4
 	function c.f( ... )
 		local a = 5
-		print(a)
+		print(a, self.a, upvalue.a, upvalue.self.a, upvalue.upvalue.a)
 	end
 end
 可以跳过直接获取upvalue，则需要 upvalue.abc
+也可以upvalue.self.abc
+
+local function 没有self，因此table的function可以用如下方式
+local a = 1
+local t = {
+	a = 2
+	f = local function (c)
+		return a + c --此处的a = 1
+	end
+}
 
 5.1
-require() 会返回文件最后的 return，但如果没有 return 则返回文件环境
+-- require() 会返回文件最后的 return，但如果没有 return 则返回文件环境
 
 load loadfile loadstring 可以带参数，如loadfile(path, param1, param2, ...), 获取的文本中会以一个全局的 ... 得到相应的参数；
 这样就把这个调用过程和function保持一致
@@ -55,9 +66,25 @@ require，命令行调用也同样，第一个值也是参数，如 reuqire("xxx
 math库全部为number的元表
 原来的全局函数仍可以用，如 math.floor(1) 和 (1).floor() ，因为math是number的元表，通过元表的index方法将self赋值到math的参数上
 
-tostring() print() 可以把table转换成字符串，便于和 loadstring 一起高效进行序列化和反序列化
+tostring() 可以把table转换成字符串，便于和 loadstring 一起高效进行序列化和反序列化
 
 没有关键字 in while until then 没有符号 : .. 没有特殊字符 _G 增加特殊字符 range upvalue 修改 self
+
+5.2
+语法糖：
+function abc{x = 1, c = 2}
+	
+end
+等于
+function abc(__t)
+	local x, c
+	if __t then
+		x = __t[x] or 1
+		c = __t[c] or 2
+	end
+end
+
+不予许 function abc{} 或者 function abc{a, b}
 
 -----------------------
 
@@ -74,26 +101,21 @@ Class.class(self, "newLayer", Node)
 local MIN_C = 1
 local MAX_C = 5
 
-function ctor(r_color_colorTab, g, b)
+function ctor{c = nil, r = 0, g = 0, b = 0}
 	call(super.ctor, self)
 
 	size = Size.new(0, 0)
 	color = nil
 	otherColors = {}
 
-	local t = type(r_color_colorTab)
-
-	if t == "number" do
-		color = Color.new(r_color_colorTab, g, b)
-	elseif t == "color" do
-		color = r_color_colorTab
-	elseif t == "table" do
-		color = r_color_colorTab[1]
-		otherColors = r_color_colorTab
-	end 	
+	if not c do
+		color = Color.new(r, g, b)
+	else
+		color = c
+	end	
 
 	local tab = {
-		doit = function ( ... )
+		doit = local function ( ... )
 			
 		end
 	}
