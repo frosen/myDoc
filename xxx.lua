@@ -54,6 +54,11 @@ local t = {
 	end
 }
 
+local function t.f(c)
+
+end
+
+
 5.1
 -- require() 会返回文件最后的 return，但如果没有 return 则返回文件环境
 
