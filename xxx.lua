@@ -19,6 +19,8 @@ for i = range(1, 10) do
 	print(i)
 end
 
+upvalue需要增加%
+
 5.0
 不能用_G, 环境的概念改变，每个非 local 的 function 都有一个名为 self 的环境表，指向调用它的 table，
 一个文件也是一个function，所以指向本文件的self
@@ -29,39 +31,11 @@ setEnv，getEnv设置，获取的就是self
 如果function改变了它所在的table，则环境也改变了
 
 self 是可以省略的
-于是一个值的查找顺序为：本地local，self，upvalue的local，upvalue的self，以此类推
-local a = 1
-local b = {}
-b.a = 2
-function b.f()
-	c = {}
-	c.a = 3
-	local a = 4
-	function c.f( ... )
-		local a = 5
-		print(a, self.a, upvalue.a, upvalue.self.a, upvalue.upvalue.a)
-	end
-end
-可以跳过直接获取upvalue，则需要 upvalue.abc
-也可以upvalue.self.abc
+%的upvalue依次查找上层的local，上层的self，上上层的local，上上层的self，只查找依次
 
-local function 没有self，因此table的function可以用如下方式
-local a = 1
-local t = {
-	a = 2
-	f = local function (c)
-		return a + c --此处的a = 1
-	end
-}
-
-local function t.f(c)
-
-end
-
+语法糖：如果文件最后没有return，则会自动加上 return self
 
 5.1
--- require() 会返回文件最后的 return，但如果没有 return 则返回文件环境
-
 load loadfile loadstring 可以带参数，如loadfile(path, param1, param2, ...), 获取的文本中会以一个全局的 ... 得到相应的参数；
 这样就把这个调用过程和function保持一致
 require，命令行调用也同样，第一个值也是参数，如 reuqire("xxx", 1)，参数为"xxx", 1；lua xxx.lua 1 2 参数为"xxx.lua" 1 2
@@ -73,7 +47,7 @@ math库全部为number的元表
 
 tostring() 可以把table转换成字符串，便于和 loadstring 一起高效进行序列化和反序列化
 
-没有关键字 in while until then 没有符号 : .. 没有特殊字符 _G 增加特殊字符 range upvalue 修改 self
+没有关键字 in while until then 没有符号 : .. 没有特殊字符 _G 增加特殊字符 range % 修改 self
 
 5.2
 语法糖：
@@ -93,28 +67,28 @@ end
 
 -----------------------
 
-local Class = require "class"
+local C = require "class"
 local Node = require "CC.Node"
 
 local Size = require "CC.Size"
 local Color = require "CC.Color"
 
-Class.class(self, "newLayer", Node)
+C.class(self, "newLayer", Node)
 
 -- Class.class(self, "UserData", "BaseData")
 
 local MIN_C = 1
 local MAX_C = 5
 
-function ctor{c = nil, r = 0, g = 0, b = 0}
-	call(super.ctor, self)
+function ctor{pos = C.need(), c = nil, r = 0, g = 0, b = 0}
+	call(super.ctor, self, pos)
 
-	size = Size.new(0, 0)
+	size = %Size.new(0, 0)
 	color = nil
 	otherColors = {}
 
 	if not c do
-		color = Color.new(r, g, b)
+		color = %Color.new(r, g, b)
 	else
 		color = c
 	end	
@@ -135,17 +109,15 @@ function getMixColor()
 		return color
 	end
 
-	local mix = Color.clear
+	local mix = %Color.clear
 	for _, color = ipairs(otherColors) do
-		for i = range(MIN_C, MAX_C) do
-			mix = Color.mix(color, mix) 
+		for i = range(%MIN_C, %MAX_C) do
+			mix = %Color.mix(color, mix) 
 		end
 	end
 
 	return mix
 end
-
-
 
 
 
