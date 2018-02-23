@@ -4,6 +4,8 @@ lua
 没有do while 和 repeat until ，被 repeat end 取代
 没有if then，被 if do 取代
 没有 .. ，被 + 取代
+
+无法使用 '' 只能用 ""
  
 统一 for 的用法为 for xx = xxx do end 
 原来的 for k,v in pairs(table_name) do
@@ -31,7 +33,7 @@ setEnv，getEnv设置，获取的就是self
 如果function改变了它所在的table，则环境也改变了
 
 self 是可以省略的
-%的upvalue依次查找上层的local，上层的self，上上层的local，上上层的self，只查找依次
+%的upvalue依次查找上层的local，上层的self，上上层的local，上上层的self，只查找一次
 
 语法糖：如果文件最后没有return，则会自动加上 return self
 
@@ -92,12 +94,6 @@ function ctor{pos = C.need(), c = nil, r = 0, g = 0, b = 0}
 	else
 		color = c
 	end	
-
-	local tab = {
-		doit = local function ( ... )
-			
-		end
-	}
 end
 
 function setColor(c)
