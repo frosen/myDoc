@@ -23,13 +23,17 @@ end
 
 upvalue需要增加%
 
+允许 function(a, b,) 
+
 5.0
 不能用_G, 环境的概念改变，每个非 local 的 function 都有一个名为 self 的环境表，指向调用它的 table，
 一个文件也是一个function，所以指向本文件的self
 可实现面向对象
 :不再可用，因为面向对象用 环境 了，而且:也容易用错，
 setEnv，getEnv设置，获取的就是self
-新增全局函数 call，call(func, env table, arg1, ...), 同时pcall，xpcall都增加了env的参数
+新增全局函数 call
+call，pcall，xpcall都增加了env的参数
+call, pcall, xpcall变成function的函数，func.call(env, arg1, ...), func.xpcall(returnFunc, env, arg1)
 如果function改变了它所在的table，则环境也改变了
 
 self 是可以省略的
