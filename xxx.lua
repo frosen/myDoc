@@ -52,6 +52,8 @@ math库全部为number的元表
 原来的全局函数仍可以用，如 math.floor(1) 和 (1).floor() ，因为math是number的元表，通过元表的index方法将self赋值到math的参数上
 
 tostring() 可以把table转换成字符串，便于和 loadstring 一起高效进行序列化和反序列化
+										
+增加args（取代...)，可以用 args.totable()变成table，或者 args.totablewithfalse()变成table同时把nil变成false
 
 没有关键字 in while until then 没有符号 : .. 没有特殊字符 _G 增加特殊字符 range % 修改 self
 
