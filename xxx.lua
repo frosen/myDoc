@@ -50,6 +50,8 @@ require，命令行调用也同样，第一个值也是参数，如 reuqire("xxx
 如 unpack, setmetatable 为 table.unpack, table.setmetatable
 math库全部为number的元表
 原来的全局函数仍可以用，如 math.floor(1) 和 (1).floor() ，因为math是number的元表，通过元表的index方法将self赋值到math的参数上
+										
+table元表的__index和__newindex改为__set, __get，同时所有非nil的值都会有元表，里面有__set, __get
 
 tostring() 可以把table转换成字符串，便于和 loadstring 一起高效进行序列化和反序列化
 
@@ -79,7 +81,7 @@ local Node = require "CC.Node"
 local Size = require "CC.Size"
 local Color = require "CC.Color"
 
-C.class(self, "newLayer", Node)
+self = C.class("Layer", Node)
 
 -- Class.class(self, "UserData", "BaseData")
 
