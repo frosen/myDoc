@@ -71,6 +71,21 @@ end
 
 不予许 function abc{} 或者 function abc{a, b}
 
+5.3
+增加一种值 数组 local a = [4] 其中4表示数组长度
+此数组长度不可变，没赋值的为nil，错误的index抛出异常，效率较高
+
+官方luajit，可以用@immutable定义一个不可再增加key的table，用于开启优化
+local a = @immutable {
+    @number x = 1,
+    @string y = "",
+}
+还有@number @string @boolean @function @table @array @thread于table属性值 @debug @end 等
+
+@debug do
+
+end
+
 -----------------------
 
 local C = require "class"
