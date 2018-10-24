@@ -3,7 +3,6 @@ lua
 5.0以前
 没有do while 和 repeat until ，被 repeat end 取代
 没有if then，被 if do 取代
-没有 .. ，被 + 取代
 
 无法使用 '' 只能用 ""
  
