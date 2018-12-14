@@ -52,7 +52,7 @@ math库全部为number的元表
 
 tableserialize(table, k) 可以把table转换成字符串，便于和 loadstring 一起高效进行序列化和反序列化，k为级数默认无限
 
-没有关键字 in while until then 没有符号 : .. 没有特殊字符 _G 增加特殊字符 range % 修改 self
+没有关键字 in while until then 没有符号 : 没有特殊字符 _G 增加特殊字符 range % 修改 self
 
 5.2
 语法糖：
