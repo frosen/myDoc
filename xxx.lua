@@ -50,7 +50,7 @@ require，命令行调用也同样，第一个值也是参数，如 reuqire("xxx
 math库全部为number的元表
 原来的全局函数仍可以用，如 math.floor(1) 和 (1).floor() ，因为math是number的元表，通过元表的index方法将self赋值到math的参数上
 
-tableserialize(table, k) 可以把table转换成字符串，便于和 loadstring 一起高效进行序列化和反序列化，k为级数默认无限
+table.serialize(k) 可以把table转换成字符串，便于和 loadstring 一起高效进行序列化和反序列化，k为级数默认无限
 
 没有关键字 in while until then 没有符号 : 没有特殊字符 _G 增加特殊字符 range % 修改 self
 
@@ -71,7 +71,7 @@ end
 不予许 function abc{} 或者 function abc{a, b}
 
 5.3
-增加一种值 数组 local a = [4] 其中4表示数组长度
+增加一种值 数组 local a = [<4>] 其中4表示数组长度
 此数组长度不可变，没赋值的为nil，错误的index抛出异常，效率较高
 
 官方luajit，可以用@immutable定义一个不可再增加key的table，用于开启优化
