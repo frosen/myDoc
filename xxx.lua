@@ -24,6 +24,13 @@ upvalue需要增加%
 
 允许 function(a, b,) 
 
+没有协程，取而代之的是语法糖，可以将 call(a, function (r) xxx end, b) 变成
+call(a, callawait(r), b)
+xxx
+也就是 callawait会把此block中，该调用之后所有的内容放到回调中
+一个call中只能有一个callawait
+
+
 5.0
 不能用_G, 环境的概念改变，每个非 local 的 function 都有一个名为 self 的环境表，指向调用它的 table，
 一个文件也是一个function，所以指向本文件的self
