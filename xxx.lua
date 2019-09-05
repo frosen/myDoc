@@ -38,8 +38,7 @@ xxx
 :不再可用，因为面向对象用 环境 了，而且:也容易用错，
 setEnv，getEnv设置，获取的就是self
 新增全局函数 call
-call，pcall，xpcall都增加了env的参数
-call, pcall, xpcall变成function的函数，func.call(env, arg1, ...), func.xpcall(returnFunc, env, arg1)
+call，pcall，xpcall都增加了env的参数：call(func, env, arg1, ...), xpcall(func, returnFunc, env, arg1)
 如果function改变了它所在的table，则环境也改变了
 
 self 是可以省略的
@@ -53,9 +52,12 @@ load loadfile loadstring 可以带参数，如loadfile(path, param1, param2, ...
 require，命令行调用也同样，第一个值也是参数，如 reuqire("xxx", 1)，参数为"xxx", 1；lua xxx.lua 1 2 参数为"xxx.lua" 1 2
 
 一些全局函数尽可能变成类函数，
-如 unpack, setmetatable 为 table.unpack, table.setmetatable
-math库全部为number的元表
-原来的全局函数仍可以用，如 math.floor(1) 和 (1).floor() ，因为math是number的元表，通过元表的index方法将self赋值到math的参数上
+如 unpack, setmetatable xpcall 为 table.unpack, table.setmetatable func.xpcall
+math库全部为number的元表，如 math.floor(1) 改成 (1).floor()
+string, math等元表也可以添加新方法，需要将其__metatable	= nil，如
+										
+string.__metatable = nil	
+string.aaa = ...								
 
 table.serialize(k) 可以把table转换成字符串，便于和 loadstring 一起高效进行序列化和反序列化，k为级数默认无限
 
@@ -81,8 +83,16 @@ end
 增加一种值 数组 local a = [<4>] 其中4表示数组长度
 此数组长度不可变，没赋值的为nil，错误的index抛出异常，效率较高
 
+装饰器 @ ，也就是function的语法糖，放在前面
+@aaa
+local a = {
+    @xxx x = 1, 
+    @vvv(3, 5) --等于 x = xxx(func, 3, 5)
+    y = function () {},
+}											
 官方luajit，可以用@immutable定义一个不可再增加key的table，用于开启优化
-local a = @immutable {
+@immutable 
+local a = {
     @number x = 1,
     @string y = "",
 }
