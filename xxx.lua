@@ -96,11 +96,8 @@ local a = {
     @number x = 1,
     @string y = "",
 }
-还有@number @string @boolean @function @table @array @thread于table属性值 @debug @end 等
+还有@number @string @boolean @function @table @array @thread于table属性值
 
-@debug do
-
-end
 
 -----------------------
 
