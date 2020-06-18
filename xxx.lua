@@ -22,8 +22,6 @@ end
 
 upvalue需要增加%
 
-允许 function(a, b,) 
-
 没有协程，取而代之的是语法糖，可以将 call(a, function (r) xxx end, b) 变成
 call(a, callawait(r), b)
 xxx
