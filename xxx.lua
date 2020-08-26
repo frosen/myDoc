@@ -97,9 +97,6 @@ local a = {
     @string y = "",
 }
 还有@number @string @boolean @function @table @array @thread于table属性值
-
-增加元方法 __close
-增加const放在赋值前 如 const local a = 5   const self.c = 9
 												
 -----------------------
 
