@@ -44,6 +44,8 @@ self 是可以省略的
 
 语法糖：如果文件最后没有return，则会自动加上 return self
 
+不再能使用 __index = table
+
 5.1
 load loadfile loadstring 可以带参数，如loadfile(path, param1, param2, ...), 获取的文本中会以一个全局的 ... 得到相应的参数；
 这样就把这个调用过程和function保持一致
@@ -96,7 +98,9 @@ local a = {
 }
 还有@number @string @boolean @function @table @array @thread于table属性值
 
-
+增加元方法 __close
+增加const放在赋值前 如 const local a = 5   const self.c = 9
+												
 -----------------------
 
 local C = require "class"
