@@ -97,6 +97,8 @@ local a = {
     @string y = "",
 }
 还有@number @string @boolean @function @table @array @thread于table属性值
+
+增加tobeclose(func)，在超出作用域时候执行func
 												
 -----------------------
 
