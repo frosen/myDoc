@@ -42,8 +42,6 @@ call，pcall，xpcall都增加了env的参数：call(func, env, arg1, ...), xpca
 self 是可以省略的
 %的upvalue依次查找上层的local，上层的self，上上层的local，上上层的self，只查找一次
 
-语法糖：如果文件最后没有return，则会自动加上 return self
-
 不再能使用 __index = table
 
 5.1
@@ -78,9 +76,11 @@ function abc(__t)
 end
 
 不予许 function abc{} 或者 function abc{a, b}
+									
+goto只能在同一函数，并且只能往下
 
 5.3
-增加一种值 数组 local a = [<4>] 其中4表示数组长度
+增加一种值 数组 local a = <[4]> 其中4表示数组长度
 此数组长度不可变，没赋值的为nil，错误的index抛出异常，效率较高
 
 装饰器 @ ，也就是function的语法糖，放在前面
@@ -97,6 +97,7 @@ local a = {
     @string y = "",
 }
 还有@number @string @boolean @function @table @array @thread于table属性值
+@const
 
 增加tobeclose(func)，在超出作用域时候执行func
 												
@@ -112,8 +113,8 @@ self = C.class("Layer", Node)
 
 -- Class.class(self, "UserData", "BaseData")
 
-local MIN_C = 1
-local MAX_C = 5
+local @number MIN_C = 1
+local @number MAX_C = 5
 
 function ctor{pos = C.need(), c = nil, r = 0, g = 0, b = 0}
 	call(super.ctor, self, pos)
@@ -147,6 +148,8 @@ function getMixColor()
 
 	return mix
 end
+														
+return self
 
 
 
