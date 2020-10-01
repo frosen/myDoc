@@ -49,8 +49,7 @@ load loadfile loadstring 可以带参数，如loadfile(path, param1, param2, ...
 这样就把这个调用过程和function保持一致
 require，命令行调用也同样，第一个值也是参数，如 reuqire("xxx", 1)，参数为"xxx", 1；lua xxx.lua 1 2 参数为"xxx.lua" 1 2
 
-一些全局函数尽可能变成类函数，
-如 unpack, setmetatable xpcall 为 table.unpack, table.setmetatable func.xpcall
+string，math，table等库都变成成员方法，而不是静态，
 math库全部为number的元表，如 math.floor(1) 改成 (1).floor()
 string, math等元表也可以添加新方法，需要将其__metatable	= nil，如
 										
@@ -80,8 +79,8 @@ end
 goto只能在同一函数，并且只能往下
 
 5.3
-增加一种值 数组 local a = <[4]> 其中4表示数组长度，使用a[3]获取和赋值，但里面只能存double整数
-可以使用#获取长度，可以用for遍历，可自动被垃圾回收
+增加一种值 数组 local a = <[4]> 其中4表示数组长度，使用a[3]获取和赋值，但里面只能存int整数
+可以使用#获取长度，可以用for apairs遍历，可自动被垃圾回收
 此数组长度不可变，没赋值的为nil，错误的index抛出异常，效率较高，该值会直接使用c的new int[]
 
 装饰器 @ ，也就是function的语法糖，放在前面
